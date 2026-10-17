@@ -50,11 +50,12 @@
   /* ---------------- wedding + bidaai ---------------- */
   #shaadi{position:absolute;inset:0;width:100%;height:100%;z-index:4;opacity:0;
     transition:opacity 1.4s ease;pointer-events:none}
-  .shaadi #shaadi{opacity:1}
+  #shaadi svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #shaadi.on{opacity:1}
   .stage{transition:transform 1.2s cubic-bezier(.4,0,.2,1)}
-  .stage.centered4{transform:translateX(116px)}
+  .stage.centered4{transform:translateX(119px)}
   .slot{transition:transform 2.2s cubic-bezier(.45,0,.55,1),opacity 2.4s ease}
-  .slot.leaving{transform:translateX(560px);opacity:0}
+  .slot.leaving{transform:translateX(600px) rotate(4deg);opacity:0}
   .cheer .slot .arm-r{animation:wave .95s ease-in-out infinite}
   .cheer .slot .arm-l{animation:armIdle 1.05s ease-in-out infinite}
   /* little tears for Mummy during the vidaai */
@@ -77,7 +78,7 @@
   #framed .pic{position:relative;height:168px;overflow:hidden;border:7px solid #e8a90a;border-radius:14px;
     background:linear-gradient(#fff8e6,#ffe9c2);
     box-shadow:0 10px 0 rgba(0,0,0,.3),0 0 28px rgba(255,215,90,.55)}
-  #framed .pic .char-svg{width:222px;position:absolute;left:-16px;top:-2px}
+  #framed .pic .char-svg{width:232px;position:absolute;left:-21px;top:-30px}
   #framed .cap{margin-top:7px;font-size:23px;font-weight:800;color:#fff;text-shadow:0 3px 0 #2a1a12}
   #framed .cap small{display:block;font-size:14px;font-weight:700;color:#ffe9a8;text-shadow:0 2px 0 #2a1a12}
 
@@ -420,9 +421,18 @@
     <!-- flowers along the floor line -->
     <div class="flowers" id="flowers"></div>
 
+    <!-- wedding mandap backdrop (fades in for Pooja's shaadi) -->
+    <div id="shaadi"></div>
+
     <div id="spot"></div>
     <div class="stage" id="stage"></div>
     <div id="bubble"><span id="bubbleText">Hi!</span></div>
+
+    <!-- framed wedding photo of the bride -->
+    <div id="framed">
+      <div class="pic"></div>
+      <div class="cap">Pooja ki Shaadi<small>Mrs. Pooja 💐</small></div>
+    </div>
 
     <div class="topbar">
       <div id="logo"></div>
@@ -579,6 +589,19 @@ const sCheer = () => {
 };
 const sJump = (at) => tone({freq:220, to:700, dur:0.18, type:'sine', vol:0.28, at:at||0});
 const sClick = (at) => nz({dur:0.05, vol:0.25, type:'highpass', freq:2400, at:at||0, attack:0.001});
+/* a little shehnai for the wedding */
+const sShehnai = () => {
+  [[587.33,0],[659.25,0.14],[783.99,0.28],[880,0.44],[1046.5,0.6]].forEach(n =>
+    tone({freq:n[0], dur:0.34, type:'triangle', vol:0.22, at:n[1], attack:0.02, vib:6.5, vibDepth:12}));
+  tone({freq:146.83, dur:1.1, type:'sine', vol:0.14, at:0, attack:0.08});
+  tone({freq:220, dur:1.0, type:'sine', vol:0.1, at:0.1, attack:0.1});
+};
+/* a soft, a bit sad, tone for the bidaai */
+const sAww = () => {
+  tone({freq:392, to:196, dur:1.05, type:'sine', vol:0.26});
+  tone({freq:311, to:155, dur:1.25, type:'triangle', vol:0.17, at:0.12});
+  tone({freq:196, to:131, dur:1.5, type:'sine', vol:0.14, at:0.3});
+};
 const sFinal = () => {
   const mel = [[523.25,0],[659.25,0.16],[783.99,0.32],[1046.5,0.48],[880,0.7],[1046.5,0.86],[1318.5,1.02]];
   mel.forEach(n => tone({freq:n[0], dur:0.34, type:'triangle', vol:0.3, at:n[1]}));
@@ -727,6 +750,63 @@ const CHARS = [
   }
 ];
 
+/* Pooja's bridal avatar — red & gold wedding lehenga, dupatta veil, full jewellery */
+const POOJA_BRIDAL = {
+  id:'pooja', name:'Pooja', role:'Dulhan • Bride', tag:'Aaj woh dulhan ban gayi — sabse khoobsurat! 💐',
+  bubble:'Dekho mera shaadi ka joda! 👰💐',
+  skin:'#f8cfa9', hair:'#2a1a12', shirt:'#c2153f', pants:'#b3122b', shoe:'#ffcf3f',
+  outfit:'#c2153f', accent:'#ffd84d', size:0.98, hs:1.05,
+  hairBack:                                                            /* the dupatta veil */
+    '<path class="drapery" d="M26 98 Q110 0 194 98 L198 150 Q110 172 22 150 Z"/>' +
+    '<path class="accentLine" d="M26 98 Q110 0 194 98"/>' +
+    '<circle class="accentFill noline" cx="26" cy="98" r="8"/>' +
+    '<circle class="accentFill noline" cx="194" cy="98" r="8"/>',
+  hairFront:
+    '<path class="hairshape" d="M54 94 Q54 38 110 34 Q166 38 166 94 Q150 60 110 58 Q70 60 54 94 Z"/>' +
+    '<path class="accentFill" d="M62 88 Q110 46 158 88 L158 97 Q110 56 62 97 Z"/>',
+  legs:                                                                /* flared red lehenga */
+    '<g class="legs">' +
+      '<path class="drapery" d="M70 226 Q110 236 150 226 L182 298 Q110 320 38 298 Z"/>' +
+      '<path class="deepLine" d="M70 226 L50 296 M110 236 L110 312 M150 226 L170 296"/>' +
+      '<path class="accentLine" d="M38 298 Q110 320 182 298"/>' +
+      '<rect class="shoe" x="84" y="296" width="30" height="19" rx="9"/>' +
+      '<rect class="shoe" x="108" y="296" width="30" height="19" rx="9"/>' +
+    '</g>',
+  wristDeco:                                                           /* chooda / bangles */
+    '<rect class="accentFill noline" x="-13" y="58" width="26" height="6" rx="3"/>' +
+    '<rect class="noline" x="-13" y="66" width="26" height="6" rx="3" fill="#e64b3c"/>' +
+    '<rect class="accentFill noline" x="-13" y="74" width="26" height="6" rx="3"/>',
+  bodyDeco:                                                            /* gold dupatta over the blouse */
+    '<path class="accentFill" d="M118 134 Q152 132 156 158 Q146 206 140 248 Q112 254 88 248 Q104 192 118 134 Z"/>' +
+    '<path class="deepLine" d="M118 134 Q104 192 88 248"/>' +
+    '<path class="accentLine" d="M140 180 Q118 192 96 190"/>',
+  bodyExtras:                                                          /* necklace */
+    '<path class="accentLine" d="M86 138 Q110 164 134 138"/>' +
+    '<circle class="noline" cx="110" cy="150" r="6" fill="#e64b3c"/>' +
+    '<circle class="noline" cx="96" cy="146" r="4" fill="#fff"/>' +
+    '<circle class="noline" cx="124" cy="146" r="4" fill="#fff"/>',
+  extras:                                                              /* sindoor, tikka, bindi, nath, jhumka */
+    '<rect class="noline" x="107" y="42" width="6" height="21" rx="3" fill="#d61f4e"/>' +
+    '<path d="M110 40 v14" fill="none" style="stroke:#ffd84d;stroke-width:4"/>' +
+    '<circle cx="110" cy="68" r="7.5" fill="#e64b3c" style="stroke:#ffd84d;stroke-width:3.5"/>' +
+    '<ellipse class="noline" cx="110" cy="82" rx="4.5" ry="6.5" fill="#c0153f"/>' +
+    '<circle cx="100" cy="112" r="9" fill="none" style="stroke:#ffd84d;stroke-width:4"/>' +
+    '<path d="M92 108 Q82 94 72 96" fill="none" style="stroke:#ffd84d;stroke-width:3"/>' +
+    '<g><circle cx="56" cy="120" r="6" fill="#ffd84d"/><path d="M49 120 q7 17 14 0 z" fill="#ff8a3d"/></g>' +
+    '<g><circle cx="164" cy="120" r="6" fill="#ffd84d"/><path d="M157 120 q7 17 14 0 z" fill="#ff8a3d"/></g>'
+};
+
+function setPoojaBridal(){
+  const s = slotOf('pooja'); if (!s) return;
+  const idle = s.querySelector('.idle'); if (idle) idle.innerHTML = svgChar(POOJA_BRIDAL);
+}
+function setPoojaNormal(){
+  const s = slotOf('pooja'); if (!s) return;
+  const idle = s.querySelector('.idle');
+  if (idle) idle.innerHTML = svgChar(CHARS.find(c => c.id === 'pooja'));
+}
+
+
 function svgChar(c){
   const arm = (side, tx) =>
     '<g transform="translate(' + tx + ',150)"><g class="arm arm-' + side + '">' +
@@ -773,15 +853,22 @@ function svgChar(c){
   '</svg>';
 }
 
+/* visual left-to-right order — Pooja stands on the far right so that,
+   after her bidaai, the remaining four simply recentre. */
+const ORDER = ['anil', 'vijay', 'amit', 'ajeet', 'pooja'];
+
 function buildStage(){
-  stage.innerHTML = CHARS.map((c, i) =>
-    '<div class="slot s-' + c.id + '" data-id="' + c.id + '">' +
+  stage.innerHTML = ORDER.map((id, i) => {
+    const c = CHARS.find(x => x.id === id);
+    return '<div class="slot s-' + c.id + '" data-id="' + c.id + '">' +
+      (c.id === 'vijay' ? '<i class="tear t1"></i><i class="tear t2"></i>' : '') +
       '<div class="in" style="--size:' + c.size + '">' +
         '<i class="spark s1">✦</i><i class="spark s2">✦</i><i class="spark s3">✦</i><i class="spark s4">✦</i>' +
         (c.extraHtml || '') +
         '<div class="idle" style="animation-delay:' + (i * 0.22).toFixed(2) + 's">' + svgChar(c) + '</div>' +
       '</div>' +
-    '</div>').join('');
+    '</div>';
+  }).join('');
 }
 
 /* ---- Indian festive decor: toran, rangoli, diyas, banana leaves ---- */
@@ -876,6 +963,78 @@ function buildFlowers(){
   $('#flowers').innerHTML = h;
 }
 
+/* ================================================== WEDDING MANDAP SET */
+function buildShaadi(){
+  let h = '';
+  h += '<defs>' +
+    '<linearGradient id="shBr" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#ffe6f1"/><stop offset="46%" stop-color="#ffc4de"/>' +
+      '<stop offset="100%" stop-color="#ff9ec7"/></linearGradient>' +
+    '<radialGradient id="shGlow" cx="50%" cy="42%" r="52%">' +
+      '<stop offset="0" stop-color="#fff7d0" stop-opacity=".95"/>' +
+      '<stop offset="100%" stop-color="#fff7d0" stop-opacity="0"/></radialGradient>' +
+    '<linearGradient id="shCarpet" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#d81b45"/><stop offset="100%" stop-color="#9c0f30"/></linearGradient>' +
+  '</defs>';
+  h += '<rect width="1280" height="720" fill="url(#shBr)"/>';
+  h += '<rect width="1280" height="720" fill="url(#shGlow)"/>';
+
+  /* pillars at the very edges (the family stands in front of them) */
+  const pillar = (x) =>
+    '<g>' +
+      '<rect x="' + x + '" y="118" width="52" height="572" rx="14" fill="#fff3d9" stroke="#b07a3c" stroke-width="6"/>' +
+      '<rect x="' + (x - 8) + '" y="150" width="68" height="17" rx="8" fill="#ffd84d" stroke="#b07a3c" stroke-width="5"/>' +
+      '<rect x="' + (x - 8) + '" y="330" width="68" height="17" rx="8" fill="#ffd84d" stroke="#b07a3c" stroke-width="5"/>' +
+      '<rect x="' + (x - 8) + '" y="510" width="68" height="17" rx="8" fill="#ffd84d" stroke="#b07a3c" stroke-width="5"/>' +
+      '<circle cx="' + (x + 26) + '" cy="118" r="25" fill="#ff9f1c" stroke="#c46b00" stroke-width="5"/>' +
+      '<circle cx="' + (x + 26) + '" cy="118" r="7" fill="#fff2c2" opacity=".9"/>' +
+    '</g>';
+  h += pillar(-4) + pillar(1232);
+
+  /* top beam + floral arch */
+  h += '<rect x="0" y="92" width="1280" height="34" rx="12" fill="#e0356b" stroke="#a11444" stroke-width="5"/>';
+  h += '<path d="M-20 172 Q640 -96 1300 172" fill="none" stroke="#2f9e3f" stroke-width="26" stroke-linecap="round"/>';
+  [[70, 126], [196, 78], [330, 46], [470, 27], [610, 21], [750, 27], [890, 46], [1022, 78], [1148, 126]]
+    .forEach((p, i) => {
+      h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="30" fill="' + (i % 2 ? '#ff9f1c' : '#ffd23f') +
+           '" stroke="#c46b00" stroke-width="5"/>' +
+           '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="9" fill="#fff2c2" opacity=".92"/>';
+    });
+
+  /* hanging marigold strings down the sides */
+  for (let s = 0; s < 8; s++){
+    const x = 96 + s * 156, drop = 196 + (s % 3) * 36;
+    h += '<path d="M' + x + ' 128 L' + x + ' ' + drop + '" fill="none" stroke="#2f9e3f" stroke-width="4"/>';
+    for (let k = 0; k < 7; k++){
+      const y = 138 + k * ((drop - 138) / 6);
+      const c = (k + s) % 2 ? '#ff9f1c' : '#ffc21c';
+      h += '<circle cx="' + x + '" cy="' + y.toFixed(0) + '" r="13" fill="' + c + '" stroke="#c46b00" stroke-width="3"/>' +
+           '<circle cx="' + x + '" cy="' + y.toFixed(0) + '" r="4" fill="#fff0c0" opacity=".85"/>';
+    }
+    h += '<circle cx="' + x + '" cy="' + drop + '" r="14" fill="#2f9e3f" stroke="#1c6b28" stroke-width="3"/>';
+  }
+
+  /* raised carpet / platform for the ceremony */
+  h += '<path d="M40 642 H1240 L1300 720 H-20 Z" fill="url(#shCarpet)" stroke="#7d0b26" stroke-width="6"/>';
+  h += '<path d="M40 642 H1240" fill="none" stroke="#ffd84d" stroke-width="9"/>';
+  h += '<path d="M70 664 H1210" fill="none" stroke="#ffd84d" stroke-width="5" stroke-dasharray="26 16"/>';
+  [150, 330, 950, 1130].forEach((x, i) => { h += diya(x, 690, i * 0.28); });
+  h += rangoli(640, 688);
+
+  /* a few drifting petals */
+  h += '<g fill="#fff" opacity=".75">' +
+        '<circle cx="430" cy="300" r="10"/><circle cx="868" cy="248" r="8"/>' +
+        '<circle cx="704" cy="366" r="7"/><circle cx="250" cy="392" r="9"/></g>';
+
+  $('#shaadi').innerHTML = '<svg viewBox="0 0 1280 720" preserveAspectRatio="none">' + h + '</svg>';
+}
+
+/* the framed wedding photo of the bride, shown during the vidaai */
+function buildFramed(){
+  const pic = document.querySelector('#framed .pic');
+  if (pic) pic.innerHTML = svgChar(POOJA_BRIDAL);
+}
+
 /* ========================================================== EFFECTS */
 function flash(){ flashEl.classList.add('on'); setTimeout(() => flashEl.classList.remove('on'), 110); }
 const CONF_COLORS = ['#ff5f8d','#ffd84d','#4ad6a5','#59a6ff','#b07bff','#ff8a3d','#fff'];
@@ -927,17 +1086,18 @@ function popIn(id){
   const s = slotOf(id); if (!s) return;
   s.classList.add('visible');
 }
-function highlight(id, text){
+function highlight(id, text, info){
   const c = CHARS.find(x => x.id === id); if (!c) return;
+  const d = info || c;
   document.querySelectorAll('.slot').forEach(s => {
     s.classList.toggle('active', s.dataset.id === id);
     s.classList.toggle('dim', s.dataset.id !== id);
   });
   /* card */
   card.classList.remove('on'); void card.offsetWidth;
-  cnameEl.textContent = c.name.toUpperCase();
-  croleEl.textContent = c.role;
-  ctagEl.textContent = c.tag;
+  cnameEl.textContent = d.name.toUpperCase();
+  croleEl.textContent = d.role;
+  ctagEl.textContent = d.tag;
   card.classList.add('on');
   /* spotlight */
   const s = slotOf(id);
@@ -986,9 +1146,47 @@ const HIGHLIGHTS = (function(){
   return HL_SEQ.map(h => { const o = { t:t, id:h.id, dur:h.dur }; t += h.dur + 300; return o; });
 })();
 const AJEET_GAG = HIGHLIGHTS[4].t + 2000;
-const FINALE = 22800;
-const THEEND = 27600;
-const DURATION = 29200;
+/* ---- act 4: Pooja ki shaadi + bidaai ---- */
+const SHAADI = 23200;    /* mandap backdrop fades in            */
+const DRESS  = 24400;    /* magic bridal dress change           */
+const VIDAAI = 27400;    /* bidaai — Pooja leaves her family    */
+const FINALE = 29800;    /* four-member party                   */
+const THEEND = 34400;
+const DURATION = 37600;
+
+function bidaai(){
+  const p = slotOf('pooja'); if (!p) return;
+  stage.classList.remove('cheer', 'reaction');
+  clearHighlight();
+  const v = slotOf('vijay'); if (v) v.classList.add('crying');
+  /* a farewell bubble over Pooja */
+  bubbleText.textContent = 'Bye Mummy–Papa… 🥺';
+  bubble.style.left = (stage.offsetLeft + p.offsetLeft + p.offsetWidth / 2) + 'px';
+  bubble.style.top = '372px';
+  bubble.classList.add('on');
+  sAww();
+  setTimeout(() => {
+    bubble.classList.remove('on');
+    p.classList.add('leaving');
+    sWhoosh();
+  }, 1250);
+  setTimeout(() => {
+    stage.classList.add('centered4');
+    $('#framed').classList.add('on');
+    sTada(); hearts(16); confetti(46);
+  }, 2550);
+  setTimeout(() => { if (v) v.classList.remove('crying'); }, 6200);
+}
+
+function resetWedding(){
+  const sh = document.getElementById('shaadi'); if (sh) sh.classList.remove('on');
+  const fr = document.getElementById('framed'); if (fr) fr.classList.remove('on');
+  stage.classList.remove('centered4', 'cheer');
+  const p = slotOf('pooja'); if (p) p.classList.remove('leaving', 'crying');
+  const v = slotOf('vijay'); if (v) v.classList.remove('crying');
+  bubble.classList.remove('on');
+  setPoojaNormal();
+}
 
 function ajeetGag(){
   const s = slotOf('ajeet'); if (!s) return;
@@ -1050,14 +1248,44 @@ function buildTimeline(){
   ev(18100, () => { sDrumroll(0.7); });        /* drumroll for the superstar */
   ev(AJEET_GAG, () => ajeetGag());             /* Ajeet steals the show */
 
-  /* ---- act 4: grand finale ---- */
+  /* ---- act 4: Pooja ki shaadi ---- */
+  ev(SHAADI, () => {
+    $('#shaadi').classList.add('on');            /* the mandap fades in */
+    sShehnai(); sCheer();
+    logo.classList.remove('small');
+    logo.innerHTML = titleHTML('💐 Pooja ki Shaadi 💐') +
+      '<div class="sub">Aaj ghar mein khushi hi khushi! 🎉</div>';
+    logo.classList.add('show', 'big');
+    confetti(70); hearts(14); flash();
+  });
+  ev(SHAADI + 1600, () => {
+    logo.classList.remove('big'); logo.classList.add('small');
+    logo.innerHTML = titleHTML('💐 Pooja ki Shaadi');
+  });
+  ev(DRESS, () => {                              /* magic dress change */
+    setPoojaBridal();
+    sWhoosh(); flash(); sSparkle(0.25); confetti(52); hearts(10);
+  });
+  ev(DRESS + 500, () => {
+    highlight('pooja', POOJA_BRIDAL.bubble, POOJA_BRIDAL);
+  });
+  ev(SHAADI + 2600, () => {                      /* the family celebrates */
+    stage.classList.add('cheer');
+    sCheer(); hearts(10);
+  });
+
+  /* ---- act 5: the bidaai — Pooja leaves the family ---- */
+  ev(VIDAAI, () => bidaai());
+
+  /* ---- act 6: four-member finale ---- */
   ev(FINALE, () => {
     clearHighlight();
+    stage.classList.remove('cheer');
     stage.classList.add('party');
     sCheer(); confetti(130); hearts(22); flash();
     logo.classList.remove('small');
     logo.innerHTML = titleHTML('The Kushwaha Family') +
-      '<div class="sub">❤️ 5 hearts • 1 home • 🌟 Ajeet is the superstar</div>';
+      '<div class="sub">❤️ 4 hearts • 1 home • 🌟 Ajeet is the superstar</div>';
     logo.classList.add('show', 'big');
     [0, 0.5, 1, 1.5, 2].forEach((d) => setTimeout(() => { sJump(); confetti(28); }, d * 1000));
   });
@@ -1065,11 +1293,11 @@ function buildTimeline(){
   ev(THEEND, () => {
     sFinal(); hearts(26); confetti(90);
     logo.innerHTML = titleHTML('The End ✨') +
-      '<div class="sub">👋 Bye-bye from the Kushwahas — see you soon!</div>';
+      '<div class="sub">👋 Bidaai ho gayi — ab ghar mein 4 log! See you soon 🥺💐</div>';
     logo.classList.add('show', 'big');
   });
   ev(THEEND + 2700, () => {
-    endcard.querySelector('.sub').textContent = 'Starring Anil • Vijay • Amit • Pooja • Ajeet';
+    endcard.querySelector('.sub').textContent = 'Starring Anil • Vijay • Amit • Ajeet   •   Special: Pooja (Dulhan) 💐';
     endcard.classList.add('on'); stopMusic(1.6);
   });
   ev(DURATION - 1200, () => { controls.classList.add('on'); running = false; });
@@ -1086,6 +1314,7 @@ function ensureState(){
 function run(){
   initAudio();
   buildStage(); clearTimers(); clearHighlight();
+  resetWedding();
   stage.classList.remove('party');
   endcard.classList.remove('on'); endcard.querySelector('.sub').textContent = '';
   fx.innerHTML = ''; flashEl.classList.remove('on');
@@ -1111,19 +1340,27 @@ function tick(){
 function skip(){
   if (!running) return;
   const el = performance.now() - showStart;
-  const next = HIGHLIGHTS.find(h => h.t > el + 400);
-  const target = next ? next.t : FINALE;
-  jumpTo(target);
+  const pts = HIGHLIGHTS.map(h => h.t).concat([SHAADI, DRESS, VIDAAI, FINALE]);
+  const next = pts.find(t => t > el + 400);
+  jumpTo(next != null ? next : FINALE);
 }
 function jumpTo(t){
   clearTimers(); clearHighlight();
   ensureState();
+  resetWedding();
   stage.classList.remove('party');
   endcard.classList.remove('on'); fx.innerHTML = '';
   logo.innerHTML = titleHTML('The Kushwaha Family');
   logo.classList.add('show', 'small'); logo.classList.remove('big');
   bubble.classList.remove('on'); card.classList.remove('on');
   spot.classList.remove('on');
+  /* if we jump straight into the wedding act, restore its state */
+  if (t >= DRESS){ $('#shaadi').classList.add('on'); setPoojaBridal(); }
+  else if (t >= SHAADI){ $('#shaadi').classList.add('on'); }
+  if (t >= VIDAAI){
+    const p = slotOf('pooja'); if (p) p.classList.add('leaving');
+    stage.classList.add('centered4'); $('#framed').classList.add('on');
+  }
   if (!actx) initAudio();
   if (!musicRunning) startMusic();
   showStart = performance.now() - t;
@@ -1176,7 +1413,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 /* ========================================================== BOOT */
-buildStage(); buildFlowers(); buildToran(); buildDecor(); buildGarland(); buildTimeline();
+buildStage(); buildFlowers(); buildToran(); buildDecor(); buildGarland(); buildShaadi(); buildFramed(); buildTimeline();
 /* gentle preview behind the overlay */
 setTimeout(() => { showAll(); }, 300);
 
