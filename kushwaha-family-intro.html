@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -47,6 +47,48 @@
     background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 40px,transparent 40px 80px)}
   .flowers{position:absolute;left:0;right:0;bottom:196px;height:60px;z-index:2;opacity:.95}
 
+  /* ---------------- wedding + bidaai ---------------- */
+  #shaadi{position:absolute;inset:0;width:100%;height:100%;z-index:4;opacity:0;
+    transition:opacity 1.4s ease;pointer-events:none}
+  .shaadi #shaadi{opacity:1}
+  .stage{transition:transform 1.2s cubic-bezier(.4,0,.2,1)}
+  .stage.centered4{transform:translateX(116px)}
+  .slot{transition:transform 2.2s cubic-bezier(.45,0,.55,1),opacity 2.4s ease}
+  .slot.leaving{transform:translateX(560px);opacity:0}
+  .cheer .slot .arm-r{animation:wave .95s ease-in-out infinite}
+  .cheer .slot .arm-l{animation:armIdle 1.05s ease-in-out infinite}
+  /* little tears for Mummy during the vidaai */
+  .tear{position:absolute;width:11px;height:15px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;
+    background:#8fdcff;border:2px solid #2a1a12;opacity:0;z-index:7}
+  .tear.t1{left:41%;top:31%}
+  .tear.t2{left:58%;top:31%}
+  .slot.crying .tear{animation:tearFall 1.5s ease-in infinite}
+  .slot.crying .tear.t2{animation-delay:.55s}
+  @keyframes tearFall{
+    0%{opacity:0;transform:translateY(-2px) scale(.6)}
+    25%{opacity:1;transform:translateY(7px) scale(1)}
+    100%{opacity:0;transform:translateY(36px) scale(.8)}
+  }
+  /* framed wedding photo of the bride */
+  #framed{position:absolute;left:40px;top:124px;width:180px;z-index:9;opacity:0;
+    transform:scale(.35) rotate(-11deg);transition:opacity .5s ease,transform .65s cubic-bezier(.3,1.7,.5,1);
+    pointer-events:none;text-align:center}
+  #framed.on{opacity:1;transform:none}
+  #framed .pic{position:relative;height:168px;overflow:hidden;border:7px solid #e8a90a;border-radius:14px;
+    background:linear-gradient(#fff8e6,#ffe9c2);
+    box-shadow:0 10px 0 rgba(0,0,0,.3),0 0 28px rgba(255,215,90,.55)}
+  #framed .pic .char-svg{width:222px;position:absolute;left:-16px;top:-2px}
+  #framed .cap{margin-top:7px;font-size:23px;font-weight:800;color:#fff;text-shadow:0 3px 0 #2a1a12}
+  #framed .cap small{display:block;font-size:14px;font-weight:700;color:#ffe9a8;text-shadow:0 2px 0 #2a1a12}
+
+  /* ---------------- Indian festive decor ---------------- */
+  .toran{position:absolute;left:0;right:0;top:0;width:100%;height:120px;z-index:1;pointer-events:none}
+  .decor{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+  .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flicker .34s ease-in-out infinite alternate}
+  @keyframes flicker{from{transform:scale(1,.94);opacity:.92}to{transform:scale(.9,1.22);opacity:1}}
+  .diya-glow{transform-box:fill-box;transform-origin:50% 60%;animation:diyaGlow 1s ease-in-out infinite alternate}
+  @keyframes diyaGlow{from{opacity:.28;transform:scale(1)}to{opacity:.6;transform:scale(1.18)}}
+
   /* ---------------- spotlight ---------------- */
   #spot{position:absolute;left:0;top:0;width:620px;height:620px;z-index:3;
     transform:translate(-9999px,-9999px);opacity:0;transition:opacity .45s ease,transform .5s cubic-bezier(.3,1.3,.5,1);
@@ -89,6 +131,12 @@
   .char-svg .nose{fill:none;stroke-width:4.5}
   .char-svg .brow{fill:none;stroke-width:5.5}
   .char-svg .hp{fill:none;stroke-width:9}
+  .char-svg .drapery{fill:var(--outfit,#c2255f)}
+  .char-svg .chunni{fill:var(--accent,#ffcf3f)}
+  .char-svg .accentFill{fill:var(--accent,#ffcf3f)}
+  .char-svg .accentLine{fill:none;stroke:var(--accent,#ffcf3f);stroke-width:5}
+  .char-svg .deepLine{fill:none;stroke:#c98a06;stroke-width:4.5}
+  .char-svg .detail{fill:none;stroke:rgba(0,0,0,.26);stroke-width:3.5}
 
   /* blinking */
   .eye{transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.6s infinite}
@@ -112,8 +160,61 @@
   }
   .slot.active .arm-l{animation:armIdle 1.1s ease-in-out infinite}
   @keyframes armIdle{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-10deg)}}
-  .head{transform-box:fill-box;transform-origin:50% 92%;animation:tilt 3.4s ease-in-out infinite}
-  @keyframes tilt{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+
+  /* ---- bobble-head: head wobbles on a springy neck ---- */
+  .head{transform-box:view-box;transform-origin:110px 150px;
+    animation:bobbleHead 2.6s ease-in-out infinite}
+  @keyframes bobbleHead{
+    0%  {transform:rotate(-8deg)   scale(var(--hs,1))}
+    16% {transform:rotate(6.5deg)  scale(var(--hs,1))}
+    32% {transform:rotate(-5.5deg) scale(var(--hs,1))}
+    48% {transform:rotate(5deg)    scale(var(--hs,1))}
+    64% {transform:rotate(-3deg)   scale(var(--hs,1))}
+    80% {transform:rotate(2.5deg)  scale(var(--hs,1))}
+    100%{transform:rotate(-8deg)   scale(var(--hs,1))}
+  }
+  .s-anil  .head{animation-duration:2.75s;animation-delay:-.2s}
+  .s-vijay .head{animation-duration:2.4s; animation-delay:-.9s}
+  .s-amit  .head{animation-duration:3.05s;animation-delay:-1.6s}
+  .s-pooja .head{animation-duration:2.5s; animation-delay:-2.2s}
+  .s-ajeet .head{animation-duration:1.85s;animation-delay:-.45s}
+  /* the featured member gets a big springy wobble burst, then keeps bobbing */
+  .slot.active .head{animation:wobbleBurst 1.05s cubic-bezier(.3,1.35,.5,1),
+                                bobbleHead 1.5s ease-in-out 1.05s infinite}
+  @keyframes wobbleBurst{
+    0%  {transform:rotate(0)      scale(var(--hs,1))}
+    12% {transform:rotate(-21deg) scale(var(--hs,1))}
+    26% {transform:rotate(18deg)  scale(var(--hs,1))}
+    40% {transform:rotate(-13deg) scale(var(--hs,1))}
+    55% {transform:rotate(9.5deg) scale(var(--hs,1))}
+    70% {transform:rotate(-6deg)  scale(var(--hs,1))}
+    85% {transform:rotate(3deg)   scale(var(--hs,1))}
+    100%{transform:rotate(0)      scale(var(--hs,1))}
+  }
+  /* the whole family's heads wobble when Ajeet does something silly */
+  .reaction .head{animation:wobbleBurst .9s ease-out}
+  .party .head{animation:bobbleHead 1.15s ease-in-out infinite}
+
+  /* Ajeet = star of the house */
+  .starBadge{position:absolute;z-index:6;left:50%;top:-26px;width:64px;height:64px;margin-left:-32px;opacity:0;
+    transform:scale(.2) rotate(-40deg);transition:opacity .35s ease,transform .5s cubic-bezier(.3,1.7,.5,1);
+    filter:drop-shadow(0 0 12px #ffd84d) drop-shadow(0 2px 0 #2a1a12);pointer-events:none}
+  .slot.active .starBadge,.party .starBadge{opacity:1;animation:starSpin 3.4s linear infinite}
+  @keyframes starSpin{0%{transform:scale(1) rotate(0)}100%{transform:scale(1) rotate(360deg)}}
+  .slot.superjump .idle,.slot.active.superjump .idle{animation:superJump 1.15s cubic-bezier(.3,1.5,.5,1) 2}
+  @keyframes superJump{
+    0%{transform:translateY(0) scaleY(1)}
+    18%{transform:translateY(-96px) scaleY(1.14) rotate(-4deg)}
+    40%{transform:translateY(0) scaleY(.86) rotate(3deg)}
+    58%{transform:translateY(-48px) scaleY(1.08) rotate(-2deg)}
+    78%{transform:translateY(0) scaleY(.92)}
+    100%{transform:translateY(0) scaleY(1)}
+  }
+  .lol{position:absolute;font-size:52px;opacity:0;pointer-events:none;animation:lolUp 1.9s ease-out forwards}
+  @keyframes lolUp{0%{opacity:0;transform:scale(.3)}
+    18%{opacity:1;transform:scale(1.12)}
+    62%{opacity:1;transform:translateY(-52px) scale(1.05) rotate(6deg)}
+    100%{opacity:0;transform:translateY(-110px) scale(1.15) rotate(20deg)}}
 
   /* sparkles around active char */
   .spark{position:absolute;font-size:30px;line-height:1;opacity:0;color:#fff45c;z-index:6;
@@ -142,7 +243,7 @@
     width:0;height:0;border:10px solid transparent;border-top-color:#fffdf5;border-bottom:0}
 
   /* ---------------- title + name card ---------------- */
-  .topbar{position:absolute;inset:0;z-index:8;pointer-events:none}
+  .topbar{position:absolute;inset:0;z-index:16;pointer-events:none}
   #logo{position:absolute;top:26px;left:34px;font-size:30px;font-weight:800;color:#fff;
     text-shadow:0 4px 0 #2a1a12,0 0 22px rgba(0,0,0,.35);opacity:0;transform:scale(.8);
     transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.6,.6,1),top .5s ease,left .5s ease,font-size .5s ease}
@@ -313,6 +414,8 @@
     </svg>
 
     <div class="floor"></div>
+    <svg class="toran" viewBox="0 0 1280 120" preserveAspectRatio="none" id="toranG"></svg>
+    <svg class="decor" viewBox="0 0 1280 720" preserveAspectRatio="none" id="decor"></svg>
 
     <!-- flowers along the floor line -->
     <div class="flowers" id="flowers"></div>
@@ -523,78 +626,129 @@ function stopMusic(fade){
 }
 
 /* =========================================================== FAMILY */
+/* An Indian family — kurtas, saree, lehenga, bindi, tilak, bangles */
+const LEGS_DEFAULT =
+  '<g class="legs">' +
+    '<rect class="pants" x="82" y="226" width="25" height="68" rx="12"/>' +
+    '<rect class="pants" x="113" y="226" width="25" height="68" rx="12"/>' +
+    '<rect class="shoe" x="70" y="286" width="44" height="23" rx="11"/>' +
+    '<rect class="shoe" x="106" y="286" width="44" height="23" rx="11"/>' +
+  '</g>';
+
 const CHARS = [
-  { id:'anil', name:'Anil', role:'Father', tag:'Captain of the Kushwaha ship 🚢', bubble:'Orderrr in the house! 😤',
-    skin:'#f6c69c', hair:'#2c2420', shirt:'#4a7fd6', pants:'#2f3d68', shoe:'#33261e', size:1.04,
+  { id:'anil', name:'Anil', role:'Papa • Father', tag:'Ghar ke captain — par Mummy hi asli boss! 😄',
+    bubble:'Ghar mein orderrr! 😤',
+    skin:'#f6c69c', hair:'#2c2420', shirt:'#3f7ad4', pants:'#f4e7cd', shoe:'#7a4a2a',
+    size:1.04, hs:1.10,
     hairFront:'<path class="hairshape" d="M54 96 Q52 38 110 36 Q168 38 166 96 Q150 64 110 62 Q70 64 54 96 Z"/>',
-    mouth:'<path class="mouth" d="M96 122 Q110 133 124 122"/>',
-    extras:'<path class="hairshape" d="M88 110 q22 -11 44 0 q-22 13 -44 0 Z"/>'
+    mouth:'<path class="mouth" d="M96 124 Q110 134 124 124"/>',
+    bodyDeco:'<rect class="shirt" x="93" y="124" width="34" height="18" rx="9"/>' +   /* kurta collar */
+             '<path class="detail" d="M110 142 v44"/>' +                             /* placket */
+             '<path class="detail" d="M74 168 h16"/>',                               /* chest stitch */
+    extras:'<path class="hairshape" d="M88 112 q22 -11 44 0 q-22 13 -44 0 Z"/>' +    /* mooch */
+           '<path d="M110 44 v15" stroke="#d61f4e" stroke-width="5" fill="none" stroke-linecap="round"/>' /* tilak */
   },
-  { id:'vijay', name:'Vijay', role:'Mother', tag:'The real boss & the family heart ❤️', bubble:'Dinner is ready! 🍲',
-    skin:'#f8cfa9', hair:'#2b1f1b', shirt:'#e0559a', pants:'#7b3fa8', shoe:'#4a2b3c', size:1.0,
+  { id:'vijay', name:'Vijay', role:'Mummy • Mother', tag:'Ghar ki rani — pyaar aur khana unlimited 💛',
+    bubble:'Khana ban gaya hai! 🍲',
+    skin:'#f8cfa9', hair:'#2b1f1b', shirt:'#e0559a', pants:'#b81f5b', shoe:'#ffcf3f',
+    outfit:'#c2255f', accent:'#ffcf3f', size:1.0, hs:1.09,
     hairBack:'<rect class="hairshape" x="42" y="66" width="34" height="146" rx="17"/>' +
              '<rect class="hairshape" x="144" y="66" width="34" height="146" rx="17"/>',
     hairFront:'<path class="hairshape" d="M54 94 Q54 38 110 34 Q166 38 166 94 Q150 60 110 58 Q70 60 54 94 Z"/>' +
               '<path class="hairshape" d="M62 66 q26 -22 60 -12 q-30 4 -46 22 z"/>',
-    extras:'<ellipse class="noline" cx="110" cy="54" rx="5" ry="7.5" fill="#d61f4e"/>' +
+    legs:'<g class="legs">' +
+           '<path class="drapery" d="M80 226 Q110 234 140 226 L153 296 Q110 311 67 296 Z"/>' +
+           '<path class="accentLine" d="M67 296 Q110 311 153 296"/>' +
+           '<rect class="shoe" x="86" y="290" width="30" height="19" rx="9"/>' +
+           '<rect class="shoe" x="104" y="290" width="30" height="19" rx="9"/>' +
+         '</g>',
+    wristDeco:'<rect class="accentFill noline" x="-13" y="60" width="26" height="6" rx="3"/>' +
+              '<rect class="accentFill noline" x="-13" y="68" width="26" height="6" rx="3"/>',
+    bodyDeco:'<path class="drapery" d="M118 132 Q154 128 157 156 Q150 202 143 246 Q114 252 86 246 Q106 190 118 132 Z"/>' +
+             '<path class="accentLine" d="M118 132 Q106 190 86 246"/>' +
+             '<path class="accentLine" d="M140 178 Q118 190 96 188"/>',
+    extras:'<path d="M110 38 v20" stroke="#d61f4e" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+           '<ellipse class="noline" cx="110" cy="54" rx="5" ry="7.5" fill="#d61f4e"/>' +
            '<circle class="noline" cx="54" cy="126" r="6.5" fill="#ffcf3f"/>' +
-           '<circle class="noline" cx="166" cy="126" r="6.5" fill="#ffcf3f"/>'
+           '<circle class="noline" cx="166" cy="126" r="6.5" fill="#ffcf3f"/>' +
+           '<circle cx="98" cy="106" r="5" fill="none" stroke="#ffcf3f" stroke-width="3"/>'
   },
-  { id:'amit', name:'Amit', role:'Elder Son', tag:'The responsible one… mostly 😎', bubble:'Relax Dad, I got this! 🎮',
-    skin:'#f2bd91', hair:'#1e1815', shirt:'#35b57e', pants:'#2f3a4d', shoe:'#f1f1f1', size:1.08,
+  { id:'amit', name:'Amit', role:'Bada Beta • Elder Son', tag:'Zimmedar beta… thoda sa lazy 😎',
+    bubble:'Tension not, Papa! 😎',
+    skin:'#f2bd91', hair:'#1e1815', shirt:'#2fa96f', pants:'#2f3a4d', shoe:'#f1f1f1',
+    size:1.08, hs:1.11,
     hairFront:'<path class="hairshape" d="M56 94 Q48 44 74 38 L86 62 L98 32 L114 60 L130 30 L144 60 L158 40 Q174 50 164 96 Q146 62 110 60 Q72 62 56 94 Z"/>',
+    bodyDeco:'<rect class="shirt" x="93" y="124" width="34" height="18" rx="9"/>' +
+             '<path class="detail" d="M110 142 v44"/>',
+    wristDeco:'<rect class="noline" x="-13" y="62" width="26" height="7" rx="3" fill="#e64b3c"/>',
     bodyExtras:'<g><path class="hp" d="M76 150 Q110 178 144 150" ' +
                'fill="none" stroke="#2a1a12" stroke-width="9" stroke-linecap="round"/>' +
                '<circle class="noline" cx="72" cy="152" r="12" fill="#e64b3c"/>' +
                '<circle class="noline" cx="148" cy="152" r="12" fill="#e64b3c"/></g>'
   },
-  { id:'pooja', name:'Pooja', role:'Daughter', tag:'Sunshine + a little drama ✨', bubble:'Look at my new dress! 💃',
-    skin:'#f8cfa9', hair:'#3b2417', shirt:'#ff7a59', pants:'#7b4ad1', shoe:'#ffd84d', size:0.98,
+  { id:'pooja', name:'Pooja', role:'Beti • Daughter', tag:'Ghar ki shaan — thodi si drama queen ✨',
+    bubble:'Meri nayi lehenga dekho! 💃',
+    skin:'#f8cfa9', hair:'#3b2417', shirt:'#ff5f8d', pants:'#7b4ad1', shoe:'#ffcf3f',
+    outfit:'#7b4ad1', accent:'#ffcf3f', size:0.98, hs:1.05,
     hairBack:'<circle class="hairshape" cx="48" cy="112" r="26"/><circle class="hairshape" cx="172" cy="112" r="26"/>' +
              '<rect class="hairshape" x="40" y="118" width="20" height="34" rx="10"/>' +
              '<rect class="hairshape" x="160" y="118" width="20" height="34" rx="10"/>',
     hairFront:'<path class="hairshape" d="M56 94 Q56 40 110 36 Q164 40 164 94 Q146 62 110 62 Q74 62 56 94 Z"/>',
+    legs:'<g class="legs">' +
+           '<path class="drapery" d="M76 228 Q110 236 144 228 L168 292 Q110 309 52 292 Z"/>' +
+           '<path class="accentLine" d="M52 292 Q110 309 168 292"/>' +
+           '<rect class="shoe" x="80" y="288" width="30" height="19" rx="9"/>' +
+           '<rect class="shoe" x="110" y="288" width="30" height="19" rx="9"/>' +
+         '</g>',
+    wristDeco:'<rect class="accentFill noline" x="-13" y="60" width="26" height="6" rx="3"/>' +
+              '<rect class="accentFill noline" x="-13" y="68" width="26" height="6" rx="3"/>',
+    bodyDeco:'<path class="chunni" d="M116 132 Q152 130 156 156 Q146 204 140 246 Q112 252 88 246 Q104 190 116 132 Z"/>' +
+             '<path class="deepLine" d="M116 132 Q104 190 88 246"/>',
     extras:'<g><path d="M58 26 l16 14 l-16 14 l-16 -14 z" fill="#ffd84d"/>' +
            '<path d="M90 26 l16 14 l-16 14 l-16 -14 z" fill="#ffd84d"/>' +
-           '<circle cx="74" cy="40" r="7" fill="#ff9ec4"/></g>'
+           '<circle cx="74" cy="40" r="7" fill="#ff9ec4"/></g>' +
+           '<ellipse class="noline" cx="110" cy="54" rx="4.5" ry="6.5" fill="#d61f4e"/>'
   },
-  { id:'ajeet', name:'Ajeet', role:'Youngest Son', tag:'Professional mischief maker 🎉', bubble:'I broke something… hi hi 😅',
-    skin:'#f9d6b0', hair:'#241c18', shirt:'#ffd84d', pants:'#4a7fd6', shoe:'#f1f1f1', size:0.84,
+  { id:'ajeet', name:'Ajeet', role:'Star of the House ⭐', tag:'Ghar ka SUPERSTAR — sabko hasaata hai 😂',
+    bubble:'Maine kuch toda… hi hi 😅',
+    skin:'#f9d6b0', hair:'#241c18', shirt:'#ffd84d', pants:'#fdfdf7', shoe:'#7a4a2a',
+    size:0.84, hs:1.22,
+    extraHtml:'<svg class="starBadge" viewBox="0 0 100 100">' +
+      '<path d="M50 4 L62 36 L96 38 L69 59 L79 92 L50 72 L21 92 L31 59 L4 38 L38 36 Z" ' +
+      'fill="#ffd84d" stroke="#2a1a12" stroke-width="6" stroke-linejoin="round"/>' +
+      '<circle cx="50" cy="50" r="9" fill="#fff" opacity=".9" stroke="#2a1a12" stroke-width="5"/></svg>',
     hairFront:'<path d="M50 74 Q48 30 110 28 Q172 30 170 74 Z" fill="#e64b3c"/>' +
               '<rect x="42" y="64" width="136" height="15" rx="7.5" fill="#e64b3c"/>' +
-              '<circle cx="110" cy="30" r="9" fill="#ffd84d"/>',
+              '<path d="M110 38 L113.5 45 L121 46 L115.5 51 L117 58.5 L110 54.5 L103 58.5 L104.5 51 L99 46 L106.5 45 Z" fill="#ffd84d"/>',
+    bodyDeco:'<rect class="shirt" x="93" y="124" width="34" height="18" rx="9"/>' +
+             '<path class="detail" d="M110 142 v40"/>',
     mouth:'<path class="mouth" d="M92 116 Q110 144 128 116"/>' +
           '<path class="noline" d="M105 118 h10 v13 h-10 z" fill="#fff"/><path class="noline" d="M105 118 h10 v13 h-10 z" fill="none" stroke="#2a1a12" stroke-width="3.5"/>'
   }
 ];
 
 function svgChar(c){
+  const arm = (side, tx) =>
+    '<g transform="translate(' + tx + ',150)"><g class="arm arm-' + side + '">' +
+      '<rect class="skin" x="-12" y="-2" width="24" height="84" rx="12"/>' +
+      (c.wristDeco || '') +
+      '<circle class="skin" cx="0" cy="84" r="13"/>' +
+      '<rect class="shirt" x="-13" y="-8" width="26" height="34" rx="12"/>' +
+    '</g></g>';
+
   return '' +
   '<svg class="char-svg" viewBox="0 0 220 330" style="--skin:' + c.skin + ';--hair:' + c.hair +
-  ';--shirt:' + c.shirt + ';--pants:' + c.pants + ';--shoe:' + c.shoe + '">' +
+  ';--shirt:' + c.shirt + ';--pants:' + c.pants + ';--shoe:' + c.shoe +
+  ';--outfit:' + (c.outfit || '#c2255f') + ';--accent:' + (c.accent || '#ffcf3f') +
+  ';--hs:' + (c.hs || 1) + '">' +
     '<ellipse class="gshadow noline" cx="110" cy="318" rx="64" ry="11"/>' +
-    '<g class="legs">' +
-      '<rect class="pants" x="82" y="226" width="25" height="68" rx="12"/>' +
-      '<rect class="pants" x="113" y="226" width="25" height="68" rx="12"/>' +
-      '<rect class="shoe" x="70" y="286" width="44" height="23" rx="11"/>' +
-      '<rect class="shoe" x="106" y="286" width="44" height="23" rx="11"/>' +
-    '</g>' +
-    /* arms (behind body edge, drawn first, then body overlaps shoulder) */
-    '<g transform="translate(88,150)"><g class="arm arm-l">' +
-      '<rect class="skin" x="-12" y="-2" width="24" height="84" rx="12"/>' +
-      '<circle class="skin" cx="0" cy="84" r="13"/>' +
-      '<rect class="shirt" x="-13" y="-8" width="26" height="34" rx="12"/>' +
-    '</g></g>' +
-    '<g transform="translate(132,150)"><g class="arm arm-r">' +
-      '<rect class="skin" x="-12" y="-2" width="24" height="84" rx="12"/>' +
-      '<circle class="skin" cx="0" cy="84" r="13"/>' +
-      '<rect class="shirt" x="-13" y="-8" width="26" height="34" rx="12"/>' +
-    '</g></g>' +
+    (c.legs || LEGS_DEFAULT) +
+    arm('l', 88) + arm('r', 132) +
     /* body */
     '<rect class="shirt" x="64" y="138" width="92" height="104" rx="36"/>' +
-    '<path class="shirt" d="M84 146 q26 22 52 0" fill="none" stroke="#00000022" stroke-width="4"/>' +
+    (c.bodyDeco || '') +
     (c.bodyExtras || '') +
-    /* head */
+    /* head (bobbles on its springy neck) */
     '<g class="head">' +
       '<rect class="skin" x="98" y="118" width="24" height="34" rx="11"/>' +
       (c.hairBack || '') +
@@ -624,9 +778,84 @@ function buildStage(){
     '<div class="slot s-' + c.id + '" data-id="' + c.id + '">' +
       '<div class="in" style="--size:' + c.size + '">' +
         '<i class="spark s1">✦</i><i class="spark s2">✦</i><i class="spark s3">✦</i><i class="spark s4">✦</i>' +
+        (c.extraHtml || '') +
         '<div class="idle" style="animation-delay:' + (i * 0.22).toFixed(2) + 's">' + svgChar(c) + '</div>' +
       '</div>' +
     '</div>').join('');
+}
+
+/* ---- Indian festive decor: toran, rangoli, diyas, banana leaves ---- */
+function buildToran(){
+  let h = '<path d="M0 6 Q640 34 1280 6" fill="none" stroke="#8a5a2b" stroke-width="5"/>';
+  for (let i = 0; i <= 30; i++){
+    const t = i / 30, x = t * 1280, y = 2 + Math.sin(t * Math.PI) * 24;
+    const c = i % 2 ? '#ff8c1a' : '#ffb02e';
+    h += '<path d="M' + (x - 8).toFixed(0) + ' ' + (y + 7).toFixed(0) + ' q8 20 16 0 q-8 -8 -16 0 z" ' +
+         'fill="#2f9e3f" stroke="#1c6b28" stroke-width="2.5" stroke-linejoin="round"/>';
+    h += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="13" fill="' + c +
+         '" stroke="#b35c00" stroke-width="3"/>';
+    h += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="4.5" fill="#ffe0a3" opacity=".8"/>';
+  }
+  $('#toranG').innerHTML = h;
+}
+function diya(x, y, delay){
+  return '<g>' +
+    '<ellipse class="diya-glow" cx="' + x + '" cy="' + (y - 14) + '" rx="26" ry="24" fill="#ffd84d"/>' +
+    '<path d="M' + (x - 17) + ' ' + y + ' q17 22 34 0 z" fill="#c1633a" stroke="#7d3a1c" stroke-width="3"/>' +
+    '<ellipse cx="' + x + '" cy="' + y + '" rx="17" ry="5.5" fill="#e79a63" stroke="#7d3a1c" stroke-width="3"/>' +
+    '<path class="flame" style="animation-delay:' + delay + 's" d="M' + x + ' ' + (y - 30) +
+      ' q12 15 0 24 q-12 -9 0 -24 z" fill="#ffe98a" stroke="#ff8c1a" stroke-width="2.5"/>' +
+  '</g>';
+}
+function rangoli(cx, cy){
+  const cols = ['#ff5f8d','#ffd84d','#4ad6a5','#ffffff','#ff8a3d'];
+  let h = '';
+  for (let r = 1; r <= 3; r++)
+    h += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (r * 22) + '" ry="' + (r * 9) +
+         '" fill="none" stroke="' + cols[r] + '" stroke-width="5"/>';
+  for (let a = 0; a < 10; a++){
+    const ang = a * Math.PI / 5;
+    h += '<circle cx="' + (cx + Math.cos(ang) * 50).toFixed(0) + '" cy="' + (cy + Math.sin(ang) * 21).toFixed(0) +
+         '" r="6.5" fill="' + cols[a % 5] + '" stroke="#2a1a12" stroke-width="2.5"/>';
+  }
+  h += '<circle cx="' + cx + '" cy="' + cy + '" r="11" fill="#ffd84d" stroke="#2a1a12" stroke-width="3"/>';
+  return h;
+}
+function bananaPlant(x, y, s){
+  let h = '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">';
+  for (let i = -2; i <= 2; i++){
+    const rot = i * 26;
+    h += '<g transform="rotate(' + rot + ')"><path d="M0 0 Q22 -40 4 -96 Q-16 -44 0 0 Z" ' +
+         'fill="' + (i % 2 ? '#2f9e3f' : '#43b552') + '" stroke="#1c6b28" stroke-width="4"/>' +
+         '<path d="M0 -6 L2 -84" stroke="#1c6b28" stroke-width="2.5" fill="none"/></g>';
+  }
+  h += '<rect x="-9" y="-8" width="18" height="26" rx="6" fill="#6f8a3a" stroke="#40551f" stroke-width="4"/>';
+  return h + '</g>';
+}
+function buildDecor(){
+  let h = '';
+  /* rangoli + diyas at the two front corners of the veranda */
+  h += rangoli(82, 700) + rangoli(1198, 700);
+  [[40, 678, 0], [82, 690, .12], [124, 676, .2], [1156, 676, .08], [1198, 690, .17], [1240, 678, .05]]
+    .forEach(d => { h += diya(d[0], d[1], d[2]); });
+  /* banana plants in the garden */
+  h += bananaPlant(46, 616, .95) + bananaPlant(472, 626, .78);
+  $('#decor').innerHTML = h;
+}
+
+/* marigold garland draped on the house door */
+function buildGarland(){
+  let h = '<g transform="translate(760,404) scale(.92)"><path d="M22 62 Q95 96 168 62" fill="none" ' +
+          'stroke="#1c6b28" stroke-width="6"/>';
+  for (let i = 0; i <= 14; i++){
+    const t = i / 14, x = 22 + t * 146, y = 62 + Math.sin(t * Math.PI) * 32;
+    h += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="9" fill="' +
+         (i % 2 ? '#ff8c1a' : '#ffb02e') + '" stroke="#b35c00" stroke-width="2.5"/>';
+    h += '<path d="M' + (x - 6).toFixed(0) + ' ' + (y + 6).toFixed(0) + ' q6 18 12 0 q-6 -7 -12 0 z" ' +
+         'fill="#2f9e3f" stroke="#1c6b28" stroke-width="2"/>';
+  }
+  h += '</g>';
+  $('#decor').insertAdjacentHTML('beforeend', h);
 }
 
 /* flowers along the stage line */
@@ -681,7 +910,7 @@ function hearts(n){
   setTimeout(() => fx.querySelectorAll('.heart').forEach(e => e.remove()), 8000);
 }
 function titleHTML(text){
-  return text.split('').map((ch, i) =>
+  return Array.from(text).map((ch, i) =>
     ch === ' ' ? '<span class="ltr" style="animation-delay:' + (i * 0.035).toFixed(2) + 's">&nbsp;</span>'
                : '<span class="ltr" style="animation-delay:' + (i * 0.035).toFixed(2) + 's">' + ch + '</span>').join('');
 }
@@ -717,7 +946,8 @@ function highlight(id, text){
   /* speech bubble — floats just above the (zoomed) character's head */
   const size = parseFloat(getComputedStyle(s.querySelector('.in')).getPropertyValue('--size')) || 1;
   const inBottom = stage.offsetTop + s.offsetTop + s.offsetHeight;
-  const headTop = inBottom - (330 * size * 1.24) + (46 * size * 1.24) - 30 - 16;
+  let headTop = inBottom - (330 * size * 1.24) + (46 * size * 1.24) - 30 - 16;
+  if (id === 'ajeet') headTop -= 34;    /* leave room for his spinning star badge */
   const bx = Math.max(175, Math.min(1030, s.offsetLeft + s.offsetWidth / 2));
   bubble.style.left = bx + 'px';
   bubble.style.top = Math.round(headTop) + 'px';
@@ -743,24 +973,55 @@ function showAll(){
   document.querySelectorAll('.slot').forEach(s => s.classList.add('visible'));
 }
 
-const HIGHLIGHTS = [
-  { t:6300,  id:'anil',  dur:2700 },
-  { t:9600,  id:'vijay', dur:2700 },
-  { t:12900, id:'amit',  dur:2700 },
-  { t:16200, id:'pooja', dur:2700 },
-  { t:19500, id:'ajeet', dur:2700 }
+/* meet-the-family order — Ajeet, the superstar of the house, gets a longer, sillier slot */
+const HL_SEQ = [
+  { id:'anil',  dur:2700 },
+  { id:'vijay', dur:2700 },
+  { id:'amit',  dur:2700 },
+  { id:'pooja', dur:2700 },
+  { id:'ajeet', dur:4200 }
 ];
+const HIGHLIGHTS = (function(){
+  let t = 6300;
+  return HL_SEQ.map(h => { const o = { t:t, id:h.id, dur:h.dur }; t += h.dur + 300; return o; });
+})();
+const AJEET_GAG = HIGHLIGHTS[4].t + 2000;
 const FINALE = 22800;
 const THEEND = 27600;
 const DURATION = 29200;
+
+function ajeetGag(){
+  const s = slotOf('ajeet'); if (!s) return;
+  stage.classList.add('reaction');
+  s.classList.add('superjump');
+  bubbleText.textContent = 'Dekho meri jump! 🚀';
+  card.classList.remove('on'); void card.offsetWidth;
+  cnameEl.textContent = 'AJEET ⭐';
+  croleEl.textContent = 'Star of the House';
+  ctagEl.textContent = 'Ek jump… aur poora ghar hil gaya! 😂';
+  card.classList.add('on');
+  sBoing(); sJump(); sJump(0.4); confetti(60);
+  const cx = s.offsetLeft + s.offsetWidth / 2;
+  ['😂','🤣','😜','😂'].forEach((e, i) => {
+    const d = document.createElement('i');
+    d.className = 'lol'; d.textContent = e;
+    d.style.left = (cx - 130 + i * 72) + 'px';
+    d.style.top = (270 + (i % 2) * 46) + 'px';
+    d.style.animationDelay = (i * 0.12) + 's';
+    fx.appendChild(d);
+    setTimeout(() => d.remove(), 2200);
+  });
+  setTimeout(() => { stage.classList.remove('reaction'); s.classList.remove('superjump'); }, 2600);
+}
 
 function buildTimeline(){
   TL.length = 0;
 
   /* ---- act 1: curtain up ---- */
   ev(0, () => { sDrumroll(1.9); });
-  ev(260, () => { logo.classList.add('show', 'big'); logo.classList.remove('small'); logo.innerHTML = titleHTML('PRESENTING…'); });
-  ev(1200, () => sSparkle());
+  ev(260, () => { logo.classList.add('show', 'big'); logo.classList.remove('small');
+                  logo.innerHTML = titleHTML('🙏 NAMASTE!'); });
+  ev(1250, () => sSparkle());
   ev(2050, () => { logo.classList.remove('show'); sWhoosh(); frame.classList.add('open'); });
   ev(2450, () => startMusic());
 
@@ -770,22 +1031,24 @@ function buildTimeline(){
   });
   ev(4350, () => { sSparkle(0); sSparkle(0.12); });
   ev(4700, () => {
-    logo.innerHTML = titleHTML('The Kushwaha Family');
+    logo.innerHTML = titleHTML('The Kushwaha Family') +
+      '<div class="sub">Ek Indian family — full masti! 🎉</div>';
     logo.classList.add('show', 'big');
     sTada(); flash(); confetti(70);
   });
-  ev(6100, () => { logo.classList.remove('big'); logo.classList.add('small'); });
+  ev(6100, () => { logo.classList.remove('big'); logo.classList.add('small'); logo.innerHTML = titleHTML('The Kushwaha Family'); });
 
   /* ---- act 3: meet the family ---- */
   HIGHLIGHTS.forEach(h => {
     ev(h.t, () => highlight(h.id, CHARS.find(c => c.id === h.id).bubble));
     ev(h.t + h.dur, () => unhighlight(h.id));
   });
-  /* fun little moments */
-  ev(9300,  () => { sJump(); sClick(); });
-  ev(12600, () => { sBoing(); });
-  ev(15900, () => { sSparkle(0); sPop(); });
-  ev(19200, () => { sBoing(); confetti(30); });
+  /* little in-between moments */
+  ev(9100,  () => { sJump(); sClick(); });
+  ev(12100, () => { sBoing(); });
+  ev(15100, () => { sSparkle(0); sPop(); });
+  ev(18100, () => { sDrumroll(0.7); });        /* drumroll for the superstar */
+  ev(AJEET_GAG, () => ajeetGag());             /* Ajeet steals the show */
 
   /* ---- act 4: grand finale ---- */
   ev(FINALE, () => {
@@ -794,7 +1057,7 @@ function buildTimeline(){
     sCheer(); confetti(130); hearts(22); flash();
     logo.classList.remove('small');
     logo.innerHTML = titleHTML('The Kushwaha Family') +
-      '<div class="sub">❤️ 5 hearts • 1 home • endless fun ❤️</div>';
+      '<div class="sub">❤️ 5 hearts • 1 home • 🌟 Ajeet is the superstar</div>';
     logo.classList.add('show', 'big');
     [0, 0.5, 1, 1.5, 2].forEach((d) => setTimeout(() => { sJump(); confetti(28); }, d * 1000));
   });
@@ -913,7 +1176,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 /* ========================================================== BOOT */
-buildStage(); buildFlowers(); buildTimeline();
+buildStage(); buildFlowers(); buildToran(); buildDecor(); buildGarland(); buildTimeline();
 /* gentle preview behind the overlay */
 setTimeout(() => { showAll(); }, 300);
 
